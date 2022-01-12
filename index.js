@@ -3,8 +3,9 @@
 import dotenv from "dotenv";
 import express from "express";
 import { MongoClient } from "mongodb";
+import { moviesRouter } from "./routes/movies.js";
 dotenv.config();
-console.log(process.env);
+// console.log(process.env);
 const app = express();
 const PORT = process.env.PORT;
 
@@ -87,7 +88,7 @@ const movies = [
   },
 ];
  app.use(express.json())
-console.log(process.env.MONGO_URL)
+// console.log(process.env.MONGO_URL)
 // const MONGO_URL = 'http://localhost'
 
 const MONGO_URL = process.env.MONGO_URL;
@@ -97,13 +98,13 @@ async function createConnection() {
   console.log("mongo is connected");
   return client;
 }
-const client = await createConnection();
+export const client = await createConnection();
 
 app.get("/", (request, response) => {
   response.send("Hello World");
 });
 
-
+app.use("/movies", moviesRouter);
 
 // app.get("/movies", (request, response) => {
 //   response.send(movies);
@@ -123,69 +124,6 @@ app.get("/", (request, response) => {
 // });
 
 
-app.get("/movies", async (request, response) => {
-  // const { language, rating } = request.query;
-  if (request.query.rating) {
-    request.query.rating = +request.query.rating
-  }
-  console.log(request.query);
-  const movie = await client
-  .db("movies")
-  .collection("movie")
-    // .find({language:language, rating:rating})
-    .find(request.query)
-    .toArray();
-  response.send(movie)
-});
-
-
-// app.get("/movies", (request, response) => {
-//   const { language } = request.query;
-//   console.log(request.query,language);
-//   response.send(movies.filter(mv=>mv.language === language));
-
-// });
-
-
-
-app.get("/movies/:id", async (request, response) => {
-  const { id } = request.params;
-  // const movie = movies.find((mv) => mv.id === id);
-  const movie = await client
-    .db("movies")
-    .collection("movie")
-    .findOne({ id: id });
-  movie ? response.send(movie) : response.status(404).send({ message: "No Movie Found" });
-  // res.send('id: ' + req.params.id);
-});
-
-
-
-app.post("/movies", async (request, response) => {
-  const newMovie = request.body;
-  // console.log(newMovie);
-  const result = await client
-  .db("movies")
-    .collection("movie")
-    .insertMany(newMovie)
-  response.send(result);
-});
-
-
-
-
-app.delete("/movies/:id", async (request, response) => {
-  const { id } = request.params;
-  // const movie = movies.find((mv) => mv.id === id);
-  const movie = await client
-    .db("movies")
-    .collection("movie")
-    .deleteOne({ id: id });
-  response.send(movie);
-  // res.send('id: ' + req.params.id);
-});
-
-
 
 // app.get("/movies/:id", (request, response) => {
 //     const { id } = request.params;
@@ -195,3 +133,4 @@ app.delete("/movies/:id", async (request, response) => {
 // });
 
 app.listen(PORT, () => console.log("listening on port", PORT));
+
