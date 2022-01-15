@@ -2,7 +2,7 @@ import { client } from "./index.js";
 import bcrypt from "bcrypt";
 
 
-export async function getAllMovies() {
+export async function getAllMovies(request) {
   return await client
     .db("movies")
     .collection("movie")
