@@ -6,7 +6,8 @@ export async function getAllMovies() {
   return await client
     .db("movies")
     .collection("movie")
-    .find({});
+    .find(request.query)
+    .toArray();
 }
 export async function getMovieById(id) {
   return await client
