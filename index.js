@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import express from "express";
 import { MongoClient } from "mongodb";
 import { moviesRouter } from "./routes/movies.js";
+import { usersRouter } from "./routes/users.js";
 dotenv.config();
 // console.log(process.env);
 const app = express();
@@ -104,7 +105,10 @@ app.get("/", (request, response) => {
   response.send("Hello World");
 });
 
+
 app.use("/movies", moviesRouter);
+
+app.use("/users", usersRouter);
 
 // app.get("/movies", (request, response) => {
 //   response.send(movies);

@@ -1,6 +1,8 @@
 
 import express from "express";
-import {getMovieById,deleteMovieById,addMovies,updateMovieById} from "../helper.js"
+import { getMovieById, deleteMovieById, addMovies, updateMovieById,getAllMovies } from "../helper.js";
+import {auth} from "../middleware/auth.js";
+
 const router=express.Router();
 
 router.get("/", async (request, response) => {
@@ -9,12 +11,12 @@ router.get("/", async (request, response) => {
       request.query.rating = +request.query.rating
     }
     console.log(request.query);
-    const movie = await client
-    .db("movies")
-    .collection("movie")
-      // .find({language:language, rating:rating})
-      .find(request.query)
-      .toArray();
+    const movie = await getAllMovies(request)
+    // .db("movies")
+    // .collection("movie")
+    //   // .find({language:language, rating:rating})
+    //   .find(request.query)
+    //   .toArray();
     response.send(movie)
   });
   
@@ -22,6 +24,7 @@ router.get("/", async (request, response) => {
   // app.get("/movies", (request, response) => {
   //   const { language } = request.query;
   //   console.log(request.query,language);
+ 
   //   response.send(movies.filter(mv=>mv.language === language));
   
   // });
