@@ -1,5 +1,6 @@
 // const express = require("express");
 // const { MongoClient } = require("mongodb")
+import cors from 'cors';
 import dotenv from "dotenv";
 import express from "express";
 import { MongoClient } from "mongodb";
@@ -7,6 +8,8 @@ import { moviesRouter } from "./routes/movies.js";
 import { usersRouter } from "./routes/users.js";
 dotenv.config();
 // console.log(process.env);
+
+ 
 const app = express();
 const PORT = process.env.PORT;
 
@@ -88,7 +91,9 @@ const movies = [
     language: "english",
   },
 ];
- app.use(express.json())
+app.use(express.json())
+app.use(cors())
+ 
 // console.log(process.env.MONGO_URL)
 // const MONGO_URL = 'http://localhost'
 
