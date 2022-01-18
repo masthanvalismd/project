@@ -7,10 +7,6 @@ const router = express.Router();
 router.post("/signup", async (request, response) => {
     const { username,password} = request.body;
     console.log(username,password);
-
-    // const result = await addMovies(newMovies);
-    // response.send(result);
-
     const isUserExist =await getUserByName(username);
     console.log(isUserExist);
     if (isUserExist) {
